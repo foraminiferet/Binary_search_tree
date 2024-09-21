@@ -16,6 +16,39 @@ class BSTree
     insert_node(@root, value)
   end
 
+  def delete_node(root, value)
+    return root if root.nil?
+
+    # treversing the tree for the selected data
+    if value < root.data
+      root.left_node = delete_node(root.left_node, value)
+    elsif value > root.data
+      root.right_node = delete_node(root.right_node, value)
+    else
+      # Deleting a leaf node
+      return nil if root.left_node.nil? && root.right_node.nil?
+
+      # Deleteing a node with one child node
+      return root.right_node if root.left_node.nil?
+      return root.left_node if root.right_node.nil?
+
+      # Deleting a node with two children nodes
+      succ_node = get_successor_node(root)
+      root.data = succ_node.data
+      root.right_node = delete_node(root.right_node, succ_node.data)
+
+    end
+    root
+  end
+
+  def get_successor_node(node)
+    return nil unless node.right_node
+
+    current_node = node.right_node
+    current_node = current_node.left_node while current_node.left_node
+    current_node
+  end
+
   def insert_node(root, value)
     return Node.new(value) if root.nil?
 
