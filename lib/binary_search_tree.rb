@@ -17,6 +17,16 @@ class BSTree
     insert_node(root, value)
   end
 
+  # Height of the longest branch
+  def height(node = root)
+    return 0 if node.nil?
+
+    left_hight = height(node.left_node)
+    right_height = height(node.right_node)
+
+    [left_hight, right_height].max + 1
+  end
+
   # Preorder DLR
   def preorder(node = root)
     return if node.nil?
@@ -44,7 +54,7 @@ class BSTree
     printf "#{node.data} "
   end
 
-  # Breadth-first traversal
+  # `Breadth-first traversal`
   def level_order(node = root, queue = [])
     print "#{node.data} "
     queue << node.left_node unless node.left_node.nil?
