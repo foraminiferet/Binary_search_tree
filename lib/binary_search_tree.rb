@@ -17,6 +17,18 @@ class BSTree
     insert_node(root, value)
   end
 
+  # Calculating the depth of a node(traversal thought parent node)
+  def depth(node, parent = root, egdes = 0)
+    return -1 if node.nil?
+    return egdes if node == parent
+
+    if node.data < parent.data
+      depth(node, parent.left_node, egdes + 1)
+    elsif node.data > parent.data
+      depth(node, parent.right_node, egdes + 1)
+    end
+  end
+
   # Height of the longest branch
   def height(node = root)
     return 0 if node.nil?
