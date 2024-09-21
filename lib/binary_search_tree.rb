@@ -16,6 +16,18 @@ class BSTree
     insert_node(@root, value)
   end
 
+  def find(value, node = @root)
+    return nil if node.nil?
+
+    if value < node.data
+      find(value, node.left_node)
+    elsif value > node.data
+      find(value, node.right_node)
+    else
+      node
+    end
+  end
+
   def delete_node(root, value)
     return root if root.nil?
 
