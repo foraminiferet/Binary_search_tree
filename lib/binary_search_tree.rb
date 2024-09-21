@@ -4,21 +4,61 @@ class BSTree
   attr_accessor :data, :root
 
   def initialize(arr)
+    # Initalizes the BSTree with a sorted array of unique values
     @data = arr.sort.unique
     @root = build_tree(data)
   end
 
   def delete(value)
-    delete_node(@root, value)
+    delete_node(root, value)
   end
 
   def insert(value)
-    insert_node(@root, value)
+    insert_node(root, value)
   end
 
-  def find(value, node = @root)
+  # Preorder DLR
+  def preorder(node = root)
+    return if node.nil?
+
+    print "#{node.data} "
+    preorder(node.left_node)
+    preorder(node.right_node)
+  end
+
+  # Inorder LDR
+  def inorder(node = root)
+    return if node.nil?
+
+    inorder(node.left_node)
+    print "#{node.data} "
+    inorder(node.right_node)
+  end
+
+  # Postorder LRD
+  def postorder(node = root)
+    return if node.nil?
+
+    postorder(node.left_node)
+    postorder(node.right_node)
+    printf "#{node.data} "
+  end
+
+  # Breadth-first traversal
+  def level_order(node = root, queue = [])
+    print "#{node.data} "
+    queue << node.left_node unless node.left_node.nil?
+    queue << node.right_node unless node.right_node.nil?
+    return if queue.empty?
+
+    level_order(queue.shift, queue)
+  end
+
+  # Find a node in binary search tree or return nil
+  def find(value, node = root)
     return nil if node.nil?
 
+    # Traversing the left and rigt sub-trees
     if value < node.data
       find(value, node.left_node)
     elsif value > node.data
@@ -29,6 +69,7 @@ class BSTree
   end
 
   def delete_node(root, value)
+    # Base case if the value isn't in the tree
     return root if root.nil?
 
     # treversing the tree for the selected data
@@ -50,43 +91,56 @@ class BSTree
       root.right_node = delete_node(root.right_node, succ_node.data)
 
     end
+    # Keeping the tree shape
     root
   end
 
+  # Get the node with the next highest value right->left treversal
   def get_successor_node(node)
+    # Base case if there is no right node
     return nil unless node.right_node
 
+    # Getting the node with the next highest value
     current_node = node.right_node
     current_node = current_node.left_node while current_node.left_node
     current_node
   end
 
   def insert_node(root, value)
+    # Base case for creating the node
     return Node.new(value) if root.nil?
 
+    # Not allowing duplicates
     return root if root.data == value
 
+    # Position where to insert the node
     if root.data > value
       root.left_node = insert_node(root.left_node, value)
     elsif root.data < value
       root.right_node = insert_node(root.right_node, value)
     end
+    # Retuning the root node so tath the tree keeps it's shape
     root
   end
 
+  # Building a binary search tree
   def build_tree(data)
     return nil if data.empty?
 
+    # Getting the root node
     mid = data.size / 2
     root = Node.new(data[mid])
 
+    # Creating a left and right tree
     root.left_node = build_tree(data[0...mid])
     root.right_node = build_tree(data[(mid + 1)..])
 
+    # Retuning the root node so the tree keeps it shape
     root
   end
 
-  def pretty_print(node = @root, prefix = '', is_left = true)
+  # Print BST elemets
+  def pretty_print(node = root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
