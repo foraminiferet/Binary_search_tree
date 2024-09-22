@@ -1,4 +1,6 @@
-class Node
+# frozen_string_literal: true
+
+class Node # rubocop:disable Style/Documentation
   attr_accessor :data, :left_node, :right_node
 
   def initialize(data)

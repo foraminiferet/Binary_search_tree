@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require_relative 'node'
 
-class BSTree
+class BSTree # rubocop:disable Metrics/ClassLength,Style/Documentation
   attr_accessor :data, :root
 
   def initialize(arr)
     # Initalizes the BSTree with a sorted array of unique values
-    @data = arr.sort.unique
+    @data = arr.sort.uniq
     @root = build_tree(data)
   end
 
@@ -90,7 +92,7 @@ class BSTree
     end
   end
 
-  def delete_node(root, value)
+  def delete_node(root, value) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     # Base case if the value isn't in the tree
     return root if root.nil?
 
@@ -191,7 +193,7 @@ class BSTree
   end
 
   # Print BST elemets
-  def pretty_print(node = root, prefix = '', is_left = true)
+  def pretty_print(node = root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
