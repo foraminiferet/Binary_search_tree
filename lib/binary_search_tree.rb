@@ -128,6 +128,20 @@ class BSTree
     current_node
   end
 
+  # Check if a bianry tree is balanced(height of the left and right subtree differs by no more than one)
+  def balanced?(node = root)
+    return true if node.nil?
+
+    # Left and right subtree heights
+    left_height = height(node.left_node)
+    right_height = height(node.right_node)
+
+    # we also need to check recursevely for is the subtrees are balanced
+    return true if (left_height - right_height).abs <= 1 && balanced?(node.left_node) && balanced?(node.right_node)
+
+    false
+  end
+
   def insert_node(root, value)
     # Base case for creating the node
     return Node.new(value) if root.nil?
@@ -143,6 +157,21 @@ class BSTree
     end
     # Retuning the root node so tath the tree keeps it's shape
     root
+  end
+
+  def inorder_array(node = root, arr = [])
+    unless node.nil?
+      inorder_array(node.left_node, arr)
+      arr << node.data
+      inorder_array(node.right_node, arr)
+    end
+    arr
+  end
+
+  # Relbalance tree
+  def rebalance
+    self.data = inorder_array
+    self.root = build_tree(data)
   end
 
   # Building a binary search tree
